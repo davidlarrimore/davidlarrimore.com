@@ -1,7 +1,12 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'standalone',
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client', 'bcrypt'],
+  },
+  images: {
+    domains: ['localhost'],
+  },
+}
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+module.exports = nextConfig

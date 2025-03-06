@@ -1,10 +1,10 @@
-import { Metadata } from 'next'
-import Chat from '@/components/features/Chat'
+import { Metadata } from 'next';
+import Chat from '@/components/features/Chat';
 
 export const metadata: Metadata = {
   title: 'AI Chat | My Personal Website',
   description: 'Chat with an AI assistant powered by Claude',
-}
+};
 
 export default function ChatPage() {
   return (
@@ -22,7 +22,7 @@ export default function ChatPage() {
         <div className="mt-8 bg-blue-50 p-6 rounded-lg">
           <h2 className="text-xl font-semibold mb-3">About This Chat</h2>
           <p className="mb-3">
-            This chatbot is powered by Anthropic's Claude API. It can help you with:
+            This chatbot is powered by Anthropic&apos;s Claude API. It can help you with:
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Questions about web development</li>
@@ -32,11 +32,11 @@ export default function ChatPage() {
             <li>General knowledge questions</li>
           </ul>
           <p className="mt-3 text-sm text-gray-600">
-            Your conversations are stored in my database to improve the assistant's responses.
+            Your conversations are stored in my database to improve the assistant&apos;s responses.
             No personal information is shared with third parties.
           </p>
         </div>
       </div>
     </main>
-  )
-}
+  );
+};

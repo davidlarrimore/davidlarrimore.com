@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
   
   const isActive = (path: string) => {
-    return pathname === path ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'
-  }
+    return pathname === path ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900';
+  };
 
   return (
     <header className="bg-white shadow-sm">
@@ -112,5 +112,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};

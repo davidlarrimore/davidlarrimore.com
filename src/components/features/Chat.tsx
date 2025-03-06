@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react';
 
 type Message = {
   role: 'user' | 'assistant'
   content: string
-}
+};
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Example conversation starters
   const conversationStarters = [
@@ -20,21 +20,21 @@ export default function Chat() {
     "Can you explain how this website works?",
     "What projects have you worked on recently?",
     "How can I build a website like this one?"
-  ]
+  ];
 
   // Auto-scroll to the bottom of the chat
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSend = async (content: string = input) => {
-    if (!content.trim()) return
+    if (!content.trim()) return;
 
     // Add user message to chat
-    const userMessage: Message = { role: 'user', content }
-    setMessages((prev) => [...prev, userMessage])
-    setInput('')
-    setLoading(true)
+    const userMessage: Message = { role: 'user', content };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput('');
+    setLoading(true);
 
     try {
       // Call API endpoint
@@ -46,26 +46,26 @@ export default function Chat() {
         body: JSON.stringify({
           messages: [...messages, userMessage],
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to get response')
-      }
+        throw new Error('Failed to get response');
+      };
 
-      const data = await response.json()
+      const data = await response.json();
       
       // Add assistant message to chat
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.response }])
+      setMessages((prev) => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) {
-      console.error('Error sending message:', error)
+      console.error('Error sending message:', error);
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Sorry, there was an error processing your request.' },
-      ])
+      ]);
     } finally {
-      setLoading(false)
-    }
-  }
+      setLoading(false);
+    };
+  };
 
   return (
     <div className="flex flex-col h-[600px] w-full">
@@ -111,7 +111,7 @@ export default function Chat() {
               </div>
             </div>
           ))
-        )}
+        )};
         {loading && (
           <div className="text-left mb-4">
             <div className="inline-block p-3 rounded-lg bg-white text-gray-800 border border-gray-200">
@@ -122,7 +122,7 @@ export default function Chat() {
               </div>
             </div>
           </div>
-        )}
+        )};
         <div ref={messagesEndRef} />
       </div>
       
@@ -147,5 +147,5 @@ export default function Chat() {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import Image from 'next/image'
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -10,7 +9,7 @@ export default function Home() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">About Me</h2>
           <p className="text-xl">
-            I'm a developer passionate about building web applications with modern technologies.
+            I&apos;m a developer passionate about building web applications with modern technologies.
             This site showcases my projects and experiments with LLMs and other technologies.
           </p>
         </section>
@@ -56,5 +55,5 @@ export default function Home() {
         </section>
       </div>
     </main>
-  )
-}
+  );
+};

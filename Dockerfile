@@ -22,6 +22,7 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 # Build the application
+RUN prisma generate
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -47,6 +48,7 @@ USER nextjs
 
 # Expose the port the app will run on
 EXPOSE 3000
+
 
 # Start the application
 CMD ["node", "server.js"]

@@ -22,7 +22,6 @@ COPY . .
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 # Build the application
-RUN prisma generate
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -42,6 +41,8 @@ COPY --from=builder /app/prisma /app/prisma
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+RUN prisma generate
 
 # Set proper permissions
 USER nextjs

@@ -23,6 +23,7 @@ COPY . .
 
 # Build the application
 RUN npm run build
+RUN prisma generate
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -41,8 +42,6 @@ COPY --from=builder /app/prisma /app/prisma
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-RUN prisma generate
 
 # Set proper permissions
 USER nextjs

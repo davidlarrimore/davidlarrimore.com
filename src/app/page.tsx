@@ -20,7 +20,7 @@ export default function Home() {
             <div className="border border-gray-300 rounded-lg p-6">
               <h3 className="text-xl font-medium mb-2">AI Chat Assistant</h3>
               <p className="mb-4">An interactive chat application powered by LLM APIs.</p>
-              <Link href="/projects/ai-chat" className="text-blue-500 hover:text-blue-700">
+              <Link href="/chat" className="text-blue-500 hover:text-blue-700">
                 View Project →
               </Link>
             </div>

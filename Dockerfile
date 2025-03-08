@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 node:18-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-WORKDIR ../app
+WORKDIR /app
 
 # Copy package files - being explicit about the existence
 COPY package.json ./

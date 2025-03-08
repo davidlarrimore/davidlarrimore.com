@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/lib/db';
-import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 
-// Initialize the OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+// Initialize the Anthropic client
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
 export async function POST(request: Request) {
   try {
     const { messages } = await request.json();
 
-    // Format messages for OpenAI API
+    // Format messages for Anthropic API
     const formattedMessages = messages.map((msg: { role: string; content: string }) => ({
       role: msg.role === 'user' ? 'user' : 'assistant',
       content: msg.content,
@@ -30,15 +30,27 @@ export async function POST(request: Request) {
       },
     });
 
-    // Get response from ChatGPT
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",  // You can change to "gpt-3.5-turbo" for a less expensive option
+    // Get response from Claude
+    const response = await anthropic.messages.create({
+      model: "claude-3-haiku-20240307",  // You can change to other Claude models as needed
+      max_tokens: 1024,
       messages: formattedMessages,
       temperature: 0.7,
-      max_tokens: 1024,
     });
 
-    const chatGptResponse = response.choices[0].message.content || "Sorry, I couldn't generate a response.";
+  // Extract the response text from Claude
+  let claudeResponse = "Sorry, I couldn't generate a response.";
+
+  if (response.content && response.content.length > 0) {
+    // Check if the content has a text property (current API format)
+    if ('text' in response.content[0]) {
+      claudeResponse = response.content[0].text;
+    } 
+    // Fallback for potential different response formats
+    else if (typeof response.content[0] === 'string') {
+      claudeResponse = response.content[0];
+    }
+  }
 
     // Update the conversation with the response
     await db.conversation.update({
@@ -46,18 +58,18 @@ export async function POST(request: Request) {
         id: conversation.id,
       },
       data: {
-        response: chatGptResponse,
+        response: claudeResponse,
         messages: {
           create: {
             role: 'assistant',
-            content: chatGptResponse,
+            content: claudeResponse,
             order: messages.length,
           },
         },
       },
     });
 
-    return NextResponse.json({ response: chatGptResponse });
+    return NextResponse.json({ response: claudeResponse });
   } catch (error) {
     console.error('Error in chat API:', error);
     return NextResponse.json(

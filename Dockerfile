@@ -1,5 +1,5 @@
 # Create a new Dockerfile in the root of your project
-FROM --platform=linux/amd64 node:18-alpine AS base
+FROM node:18-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -28,8 +28,6 @@ RUN npm run build
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
-
-ENV NODE_ENV production
 
 # Create a non-root user to run the app and own app files
 RUN addgroup --system --gid 1001 nodejs

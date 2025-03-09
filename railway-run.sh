@@ -15,7 +15,7 @@ fi
 
 # Generate Prisma client
 echo "Generating Prisma client..."
-npx prisma generate
+npx prisma generate --schema='/prisma/schema.prisma'
 
 # Run migrations
 echo "Running database migrations..."

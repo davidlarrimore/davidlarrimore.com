@@ -18,11 +18,11 @@ COPY . .
 # Next.js collects anonymous telemetry data about general usage, disable it
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Explicitly run prisma generate before building
+RUN npx prisma generate
+
 # Build the application
 RUN npm run build
-
-# Generate Prisma client
-RUN npx prisma generate
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -40,6 +40,8 @@ COPY --from=builder /app/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy Prisma files needed for migrations and client
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/prisma ./prisma
 

@@ -61,7 +61,7 @@ export default function Chat() {
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Sorry, there was an error processing your request.' },
-      ]);
+      ])
     } finally {
       setLoading(false);
     };
@@ -111,7 +111,7 @@ export default function Chat() {
               </div>
             </div>
           ))
-        )};
+        )}
         {loading && (
           <div className="text-left mb-4">
             <div className="inline-block p-3 rounded-lg bg-white text-gray-800 border border-gray-200">
@@ -122,7 +122,7 @@ export default function Chat() {
               </div>
             </div>
           </div>
-        )};
+        )}
         <div ref={messagesEndRef} />
       </div>
       

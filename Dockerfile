@@ -7,8 +7,8 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
-# Install dependencies with explicit Prisma install
-RUN npm ci && npm install prisma@6.4.1 --save-exact
+# Install dependencies including Prisma
+RUN npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -45,23 +45,19 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Copy Prisma files needed for migrations and client
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/prisma ./prisma
+
+# Copy our Railway run script
+COPY --chown=nextjs:nodejs railway-run.sh ./
+RUN chmod +x railway-run.sh
 
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT=3000
-
-# Set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
-
-# Install Prisma CLI in the runner container for migrations
-RUN npm install -g prisma@6.4.1
-
-# Copy our Railway run script
-COPY --chown=nextjs:nodejs railway-run.sh ./
-RUN chmod +x railway-run.sh
 
 # Run our script which handles Prisma initialization
 CMD ["./railway-run.sh"]

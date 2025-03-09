@@ -7,7 +7,8 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
-RUN npm ci
+# Install dependencies with explicit Prisma install
+RUN npm ci && npm install prisma@6.4.1 --save-exact
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -18,7 +19,7 @@ COPY . .
 # Next.js collects anonymous telemetry data about general usage, disable it
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Explicitly run prisma generate before building
+# Generate Prisma client
 RUN npx prisma generate
 
 # Build the application
@@ -43,6 +44,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy Prisma files needed for migrations and client
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/prisma ./prisma
 
 USER nextjs
@@ -54,5 +56,12 @@ ENV PORT=3000
 # Set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-# Run database migrations and start the application
-CMD ["/bin/sh", "-c", "npx prisma migrate deploy && node server.js"]
+# Install Prisma CLI in the runner container for migrations
+RUN npm install -g prisma@6.4.1
+
+# Copy our Railway run script
+COPY --chown=nextjs:nodejs railway-run.sh ./
+RUN chmod +x railway-run.sh
+
+# Run our script which handles Prisma initialization
+CMD ["./railway-run.sh"]

@@ -61,7 +61,7 @@ export default function Chat() {
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', content: 'Sorry, there was an error processing your request.' },
-      ])
+      ]);
     } finally {
       setLoading(false);
     };
